@@ -114,7 +114,6 @@ public class ServerWorker extends Thread {
         server.removeWorker(this);
         List<ServerWorker> workerList = server.getWorkerList();
 
-        // send other online users current user's status
         String onlineMsg = "offline " + login + "\n";
         for(ServerWorker worker : workerList) {
             if (!login.equals(worker.getLogin())) {
@@ -133,7 +132,7 @@ public class ServerWorker extends Thread {
             String login = tokens[1];
             String password = tokens[2];
 
-            // Check if the provided login credentials are valid
+
             if (("emre".equals(login) && "emre".equals(password)) ||
                 ("guest".equals(login) && "guest".equals(password)) ||
                 ("evrim".equals(login) && "evrim".equals(password))) {
@@ -144,7 +143,7 @@ public class ServerWorker extends Thread {
 
                 List<ServerWorker> workerList = server.getWorkerList();
 
-                // Send current user all other online logins
+
                 for(ServerWorker worker : workerList) {
                     if (worker.getLogin() != null) {
                         if (!login.equals(worker.getLogin())) {
@@ -154,7 +153,7 @@ public class ServerWorker extends Thread {
                     }
                 }
 
-                // Send other online users current user's status
+
                 String onlineMsg = "online " + login + "\n";
                 for(ServerWorker worker : workerList) {
                     if (!login.equals(worker.getLogin())) {
@@ -162,7 +161,7 @@ public class ServerWorker extends Thread {
                     }
                 }
             } else {
-                // Authentication failed
+
                 String msg = "error login\n";
                 outputStream.write(msg.getBytes());
                 System.err.println("Login failed for " + login);
