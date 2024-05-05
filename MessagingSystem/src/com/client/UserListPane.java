@@ -1,18 +1,17 @@
 package com.client;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserListPane extends JPanel implements UserStatusListener {
 
     private final ChatClient client;
-    private JList<String> userListUI;
-    private DefaultListModel<String> userListModel;
+    private JList<User> userListUI;
+    private DefaultListModel<User> userListModel;
 
     public UserListPane(ChatClient client) {
         this.client = client;
@@ -20,56 +19,105 @@ public class UserListPane extends JPanel implements UserStatusListener {
 
         userListModel = new DefaultListModel<>();
         userListUI = new JList<>(userListModel);
+        userListUI.setCellRenderer(new UserListCellRenderer());
         userListUI.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        userListUI.setBackground(new Color(240, 240, 240));
-        userListUI.setFont(userListUI.getFont().deriveFont(Font.PLAIN, 18)); // Increase font size
-        JScrollPane scrollPane = new JScrollPane(userListUI);
-        scrollPane.setBorder(new EmptyBorder(10, 10, 10, 10)); // Add padding
-        scrollPane.setPreferredSize(new Dimension(250, 400)); // Set preferred size
 
         setLayout(new BorderLayout());
-        add(scrollPane, BorderLayout.CENTER);
+        add(new JScrollPane(userListUI), BorderLayout.CENTER);
 
         userListUI.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() > 1) {
-                    String login = userListUI.getSelectedValue();
-                    MessagePane messagePane = new MessagePane(client, login);
-
-                    JFrame f = new JFrame("Message: " + login);
-                    f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    f.setSize(500, 500);
-
-                    JPanel panel = new JPanel(new BorderLayout());
-                    panel.setBackground(Color.WHITE);
-                    panel.add(messagePane, BorderLayout.CENTER);
-
-                    f.getContentPane().add(panel);
-                    f.setLocationRelativeTo(null); // Center the window
-                    f.setVisible(true);
+                    User selectedUser = userListUI.getSelectedValue();
+                    if (selectedUser != null) {
+                        openMessagePane(selectedUser.getLogin());
+                    }
                 }
             }
         });
     }
 
+    private void openMessagePane(String userLogin) {
+        MessagePane messagePane = new MessagePane(client, userLogin);
+        JFrame frame = new JFrame("Message: " + userLogin);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(500, 500);
+        frame.getContentPane().add(messagePane, BorderLayout.CENTER);
+        frame.setVisible(true);
+    }
+
     @Override
     public void online(String login) {
-        if (!userListModel.contains(login)) { // Check if the user is already in the list
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    userListModel.addElement(login);
-                }
-            });
+        User existingUser = findUser(login);
+        if (existingUser != null) {
+            existingUser.setOnline(true);
+            userListUI.repaint(); // Refresh the UI to reflect the change
+        } else {
+            User newUser = new User(login, true);
+            userListModel.addElement(newUser);
         }
     }
 
     @Override
     public void offline(String login) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                userListModel.removeElement(login);
+        User existingUser = findUser(login);
+        if (existingUser != null) {
+            existingUser.setOnline(false);
+            userListUI.repaint(); // Refresh the UI to reflect the change
+        }
+    }
+
+    private User findUser(String login) {
+        for (int i = 0; i < userListModel.getSize(); i++) {
+            User user = userListModel.getElementAt(i);
+            if (user.getLogin().equals(login)) {
+                return user;
             }
-        });
+        }
+        return null;
+    }
+
+    private class User {
+        private String login;
+        private boolean online;
+
+        public User(String login, boolean online) {
+            this.login = login;
+            this.online = online;
+        }
+
+        public String getLogin() {
+            return login;
+        }
+
+        public boolean isOnline() {
+            return online;
+        }
+
+        public void setOnline(boolean online) {
+            this.online = online;
+        }
+
+        @Override
+        public String toString() {
+            return login + (online ? " (Online)" : " (Offline)");
+        }
+    }
+
+    private class UserListCellRenderer extends DefaultListCellRenderer {
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            User user = (User) value;
+            setText(user.getLogin());
+            setForeground(Color.BLACK); // Set name color to black
+            setFont(getFont().deriveFont(Font.BOLD)); // Bold font
+            setPreferredSize(new Dimension(150, 30)); // Adjust cell size
+            setHorizontalAlignment(SwingConstants.CENTER); // Center-align text
+            setBackground(isSelected ? Color.LIGHT_GRAY : Color.WHITE); // Background color
+            setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10)); // Add padding
+            return this;
+        }
     }
 }
