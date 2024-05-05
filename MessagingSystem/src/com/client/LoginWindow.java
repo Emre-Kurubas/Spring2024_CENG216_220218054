@@ -36,8 +36,8 @@ public class LoginWindow extends JFrame {
         p.add(new JLabel("Username:"), gbc);
 
         gbc.gridx++;
-        gbc.ipadx = 150; // Increase text field width
-        loginField.setFont(loginField.getFont().deriveFont(16f)); // Increase font size
+        gbc.ipadx = 150; 
+        loginField.setFont(loginField.getFont().deriveFont(16f)); 
         p.add(loginField, gbc);
 
         gbc.gridx = 0;
@@ -45,7 +45,7 @@ public class LoginWindow extends JFrame {
         p.add(new JLabel("Password:"), gbc);
 
         gbc.gridx++;
-        passwordField.setFont(passwordField.getFont().deriveFont(16f)); // Increase font size
+        passwordField.setFont(passwordField.getFont().deriveFont(16f)); 
         p.add(passwordField, gbc);
 
         gbc.gridx = 0;
@@ -55,11 +55,9 @@ public class LoginWindow extends JFrame {
 
         getContentPane().add(p, BorderLayout.CENTER);
 
-        // Set button background and foreground colors
         loginButton.setBackground(new Color(65, 131, 215));
         loginButton.setForeground(Color.WHITE);
 
-        // Add button hover effect
         loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 loginButton.setBackground(new Color(54, 109, 180));
@@ -70,11 +68,10 @@ public class LoginWindow extends JFrame {
             }
         });
 
-        // Set frame background color
         getContentPane().setBackground(Color.WHITE);
 
         pack();
-        setLocationRelativeTo(null); // Center the window
+        setLocationRelativeTo(null); 
         setVisible(true);
 
         loginButton.addActionListener(new ActionListener() {
@@ -91,7 +88,7 @@ public class LoginWindow extends JFrame {
 
         try {
             if (client.login(login, password)) {
-                // bring up the user list window
+
                 UserListPane userListPane = new UserListPane(client);
                 JFrame frame = new JFrame("User List");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -102,7 +99,7 @@ public class LoginWindow extends JFrame {
 
                 setVisible(false);
             } else {
-                // show error message
+
                 JOptionPane.showMessageDialog(this, "Invalid login/password.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (IOException e) {
