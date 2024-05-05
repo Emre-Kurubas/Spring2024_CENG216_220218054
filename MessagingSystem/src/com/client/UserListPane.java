@@ -52,7 +52,7 @@ public class UserListPane extends JPanel implements UserStatusListener {
         User existingUser = findUser(login);
         if (existingUser != null) {
             existingUser.setOnline(true);
-            userListUI.repaint(); // Refresh the UI to reflect the change
+            userListUI.repaint(); 
         } else {
             User newUser = new User(login, true);
             userListModel.addElement(newUser);
@@ -64,7 +64,7 @@ public class UserListPane extends JPanel implements UserStatusListener {
         User existingUser = findUser(login);
         if (existingUser != null) {
             existingUser.setOnline(false);
-            userListUI.repaint(); // Refresh the UI to reflect the change
+            userListUI.repaint(); 
         }
     }
 
@@ -111,12 +111,12 @@ public class UserListPane extends JPanel implements UserStatusListener {
             super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             User user = (User) value;
             setText(user.getLogin());
-            setForeground(Color.BLACK); // Set name color to black
-            setFont(getFont().deriveFont(Font.BOLD)); // Bold font
-            setPreferredSize(new Dimension(150, 30)); // Adjust cell size
-            setHorizontalAlignment(SwingConstants.CENTER); // Center-align text
-            setBackground(isSelected ? Color.LIGHT_GRAY : Color.WHITE); // Background color
-            setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10)); // Add padding
+            setForeground(Color.BLACK); 
+            setFont(getFont().deriveFont(Font.BOLD)); 
+            setPreferredSize(new Dimension(150, 30)); 
+            setHorizontalAlignment(SwingConstants.CENTER); 
+            setBackground(isSelected ? Color.LIGHT_GRAY : Color.WHITE);
+            setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
             return this;
         }
     }
