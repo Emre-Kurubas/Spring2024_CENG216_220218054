@@ -34,7 +34,7 @@ public class MessagePane extends JPanel implements MessageListener {
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         inputPanel.setBackground(Color.WHITE);
 
-        inputField.setFont(inputField.getFont().deriveFont(Font.PLAIN, 16)); // Increase font size
+        inputField.setFont(inputField.getFont().deriveFont(Font.PLAIN, 16)); 
         inputField.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)
@@ -45,7 +45,7 @@ public class MessagePane extends JPanel implements MessageListener {
         sendButton.setBackground(new Color(65, 131, 215));
         sendButton.setForeground(Color.WHITE);
         sendButton.setFocusPainted(false);
-        sendButton.setFont(sendButton.getFont().deriveFont(Font.BOLD, 14)); // Increase font size
+        sendButton.setFont(sendButton.getFont().deriveFont(Font.BOLD, 14));
         sendButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         sendButton.addActionListener(new ActionListener() {
