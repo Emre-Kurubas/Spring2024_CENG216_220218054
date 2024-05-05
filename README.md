@@ -38,9 +38,18 @@ To run this project on your computer, follow these detailed steps:
 ## Note
 Rewriting the mentioned configuration files (.gitignore, .classpath, .project) according to your own computer settings is crucial for the proper functioning of the application on your computer.
 
-Additionally, please note that the com.server and com.client packages need to have separate modules in order to work correctly. Although they are together in this repository for convenience,
-it's recommended to organize them into separate modules or projects for better modularity and maintainability. This separation ensures cleaner code organization and easier management of dependencies
-between the server and client components.
+Additionally, please note the following:
+
+- **Separate Modules for Server and Client**: The `com.server` and `com.client` packages need to have separate modules to function correctly. Although they are together in this repository for convenience, it's recommended to organize them into separate modules or projects for better modularity and maintainability.
+
+  To create a module for the `com.client` project, include a `module-info.java` file inside the `com.client` package with the following content:
+
+  ```java
+  module com.client {
+      requires com.server;
+      requires org.apache.commons.lang3;
+      requires java.desktop;
+  }
 
 ## Author
 Emre Kurubaş
